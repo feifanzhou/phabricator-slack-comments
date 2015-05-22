@@ -1,8 +1,8 @@
 require 'slack'
 
 class RTM
-  @@users_by_email = {}
-  @@groups_by_name = {}
+  @@users = {}
+  @@groups = {}
   attr_reader :url
   
   def self.setup
@@ -11,11 +11,11 @@ class RTM
     resp['users'].each do |user_json|
       next if user_json['deleted']
       user = User.new(user_json)
-      @@users_by_email[user.email] = user
+      @@users[user.id] = user
     end
     resp['groups'].each do |group_json|
       group = Group.new(group_json)
-      @@groups_by_name[group.name] = group
+      @@groups[group.id] = group
     end
     return self
   end
@@ -43,6 +43,14 @@ class RTM
 
   private
   def handle_message(message, type)
+    # Only handles incoming messages for now
+    return unless type == 'message'
+    user = @@users[message['user']]
+    text = message['text']
+    group = @@groups[message['channel']]
+    task_id = group.name[1..-1]
+    # TODO: Set the right user for Phabricator first
+    Phabricator::Maniphest::Task.from_id(task_id).add_comment(text)
   end
 
   def handle_error(error)
