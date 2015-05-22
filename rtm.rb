@@ -19,4 +19,26 @@ class RTM
     end
     return self
   end
+
+  def connect
+    @ws = WebSocket::EventMachine::Client.connect(uri: @url)
+    # Syntax? @ws.onmessage &:handle_message
+    @ws.onmessage { |message, type| handle_message(message, type) }
+    @ws.onerror { |error| handle_error(error) }
+    @ws.onclose { |code, reason| handle_close(code, reason) }
+  end
+
+  def send(params)
+    @ws.send(params.to_json)
+  end
+
+  private
+  def handle_message(message, type)
+  end
+
+  def handle_error(error)
+  end
+
+  def handle_close(code, reason)
+  end
 end
