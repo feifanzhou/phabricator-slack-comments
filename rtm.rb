@@ -26,9 +26,18 @@ class RTM
     @ws.onmessage { |message, type| handle_message(message, type) }
     @ws.onerror { |error| handle_error(error) }
     @ws.onclose { |code, reason| handle_close(code, reason) }
+    @current_id = 1
   end
 
-  def send(params)
+  def send(message, group)
+    group_id = (group.is_a? Group) ? group.id : group
+    params = {
+      id: @current_id,
+      type: 'message',
+      channel: group_id,
+      text: message
+    }
+    @current_id += 1
     @ws.send(params.to_json)
   end
 
