@@ -1,3 +1,5 @@
+require 'slack'
+
 class User
   @@cached_users = {}
 
