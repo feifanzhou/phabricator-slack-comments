@@ -1,5 +1,5 @@
 class Story
-  attr_reader :type, :task_id
+  attr_reader :type, :task_id, :transaction_phid
   def initialize(params)
     @id = params['storyID']
     @type = params['storyType']
@@ -7,7 +7,7 @@ class Story
     @transaction_phid = params['storyData']['transactionPHIDs']['0']
     @user_phid = params['storyAuthorPHID']
     @story_text = params['storyText']
-    @task_id = task_id
+    @task_id = get_task_id
   end
 
   def date_created
@@ -19,7 +19,7 @@ class Story
   end
 
   private
-  def task_id
+  def get_task_id
     return '' if @story_text.nil? || @story_text.length == 0
     # Match format Tdd..., excluding colon
     # Don't want to return the T
