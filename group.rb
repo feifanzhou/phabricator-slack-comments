@@ -30,6 +30,11 @@ class Group
     @@cached_groups[group.name] = group
   end
 
+  def self.find_by_name(name)
+    Group.load_list unless @@cached_groups[name]
+    @@cached_groups[name]
+  end
+
   private
   def self.load_list
     resp = Slack.groups_list
