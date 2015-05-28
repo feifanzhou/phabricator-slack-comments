@@ -35,6 +35,15 @@ class Group
     @@cached_groups[name]
   end
 
+  def post(text)
+    options = {
+      text: text,
+      username: 'PSC Bot'
+    }
+    Slack.chat_postMessage(group_options.merge(options))
+    # TODO: Check response
+  end
+
   private
   def self.load_list
     resp = Slack.groups_list
