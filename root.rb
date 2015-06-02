@@ -1,6 +1,17 @@
 require 'sinatra'
 require 'slack'
-Dir[File.join(__dir__, '*.rb')].each { |file| require file }
+require './story'
+require './group'
+
+Slack.configure do |config|
+  config.token = ENV['SENDO_API_TOKEN']
+end
+
+Phabricator.configure do |c|
+  c.host = 'phabricator.sendo.me'
+  c.user = 'feifan'
+  c.cert = ENV['PHABRICATOR_API_TOKEN']
+end
 
 get '/' do
   "Server has not crashed"
@@ -12,11 +23,10 @@ post '/feed' do
   # "transactionPHIDs"=>{"0"=>"PHID-XACT-TASK-kxhjvfopy3ehus4"}}, "storyAuthorPHID"=>"PHID-USER-c2jesh64y2qkvlq7e7uk", 
   # "storyText"=>"feifan added a comment to T113: Test task.", "epoch"=>"1432828732"}
   story = Story.new(params)
+  p 'Made story'
   task = Phabricator::Maniphest::Task.from_id(story.task_id)
+  p 'Found task'
   comment = task.comment_from_transaction(story.transaction_phid)
-  Group.find_by_name["T#{ story.task_id }"].post(comment.text)
-end
-
-Slack.configure do |config|
-  config.token = ENV['SENDO_API_TOKEN']
+  p 'Posting to Slack'
+  Group.find_by_name["t#{ story.task_id }"].post(comment.text)
 end
