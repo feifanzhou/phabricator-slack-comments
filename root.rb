@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'slack'
+Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 
 get '/' do
   "Server has not crashed"
