@@ -14,7 +14,7 @@ stdout_path "/var/psc/logs/unicorn.log"
 
 # Unicorn socket
 # listen "/tmp/unicorn.[app name].sock"
-listen "/tmp/unicorn.myapp.sock"
+listen "/tmp/unicorn.psc.sock"
 
 # Number of processes
 worker_processes 4
