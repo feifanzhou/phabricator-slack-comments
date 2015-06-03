@@ -1,3 +1,4 @@
+require './lib/phabricator'
 require 'sinatra'
 require 'slack'
 require './story'

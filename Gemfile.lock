@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/feifanzhou/phabricator-ruby.git
-  revision: f16b585da0db2b6cd3b21b36f2183a268fbe3540
+  revision: e8fb53716e1ee8b67ab384b89386b244b89ef833
   specs:
-    phabricator (0.1.1)
+    phabricator (0.1.2)
       rest-client
 
 GEM
