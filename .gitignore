@@ -36,3 +36,7 @@ build/
 
 # Keys and tokens and things
 application.yml
+
+# Ignore application configuration
+/config/application.yml
+.env

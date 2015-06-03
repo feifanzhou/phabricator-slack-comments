@@ -3,11 +3,15 @@ require 'sinatra'
 require 'slack'
 require './story'
 require './group'
+require 'dotenv'
+
+Dotenv.load
 
 Slack.configure do |config|
   config.token = ENV['SENDO_API_TOKEN']
 end
 
+p ENV['PHABRICATOR_API_TOKEN']
 Phabricator.configure do |c|
   c.host = 'phabricator.sendo.me'
   c.user = 'feifan'
