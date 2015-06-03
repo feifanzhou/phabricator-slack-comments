@@ -23,6 +23,7 @@ class Story
     return '' if @story_text.nil? || @story_text.length == 0
     # Match format Tdd..., excluding colon
     # Don't want to return the T
-    @story_text[/T\d{2,}/][1..-1]
+    match = @story_text[/T\d{2,}/]
+    match.nil? ? '' : match[1..-1]
   end
 end
