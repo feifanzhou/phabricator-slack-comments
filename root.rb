@@ -25,7 +25,7 @@ post '/feed' do
   # "storyText"=>"feifan added a comment to T113: Test task.", "epoch"=>"1432828732"}
   story = Story.new(params)
   p 'Made story'
-  task = Phabricator::Maniphest::Task.from_id(story.task_id)
+  task = Phabricator::Maniphest::Task.find_by_id(story.task_id)
   p 'Found task'
   comment = task.comment_from_transaction(story.transaction_phid)
   p 'Posting to Slack'
