@@ -11,7 +11,6 @@ Slack.configure do |config|
   config.token = ENV['SENDO_API_TOKEN']
 end
 
-p ENV['PHABRICATOR_API_TOKEN']
 Phabricator.configure do |c|
   c.host = 'phabricator.sendo.me'
   c.user = 'feifan'
@@ -29,6 +28,8 @@ post '/feed' do
   # "storyText"=>"feifan added a comment to T113: Test task.", "epoch"=>"1432828732"}
   story = Story.new(params)
   p 'Made story'
+  task_id = story.task_id
+  return if task_id.nil? || task_id.length < 2
   task = Phabricator::Maniphest::Task.find_by_id(story.task_id)
   p 'Found task'
   comment = task.comment_from_transaction(story.transaction_phid)
