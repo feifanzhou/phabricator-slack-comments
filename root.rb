@@ -32,6 +32,7 @@ post '/feed' do
   task = Phabricator::Maniphest::Task.find_by_id(story.task_id)
   comment = task.comment_from_transaction(story.transaction_phid)
   return if comment.nil?
-  p 'Posting to Slack'
-  Group.find_by_name("t#{ story.task_id }").post(comment.text)
+  group = Group.find_by_name("t#{ story.task_id }")
+  return if group.nil?
+  group.post(comment.text)
 end
