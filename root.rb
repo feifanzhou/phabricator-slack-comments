@@ -27,12 +27,11 @@ post '/feed' do
   # "transactionPHIDs"=>{"0"=>"PHID-XACT-TASK-kxhjvfopy3ehus4"}}, "storyAuthorPHID"=>"PHID-USER-c2jesh64y2qkvlq7e7uk", 
   # "storyText"=>"feifan added a comment to T113: Test task.", "epoch"=>"1432828732"}
   story = Story.new(params)
-  p 'Made story'
   task_id = story.task_id
   return if task_id.nil? || task_id.length < 2
   task = Phabricator::Maniphest::Task.find_by_id(story.task_id)
-  p 'Found task'
   comment = task.comment_from_transaction(story.transaction_phid)
+  return if comment.nil?
   p 'Posting to Slack'
-  Group.find_by_name["t#{ story.task_id }"].post(comment.text)
+  Group.find_by_name("t#{ story.task_id }").post(comment.text)
 end
